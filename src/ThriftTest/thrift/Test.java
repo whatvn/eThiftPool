@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package ThriftTest.thrift;
 
 import com.ethicconsultant.thriftpool.GenericConnectionProvider;
@@ -12,13 +8,11 @@ import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TFramedTransport;
-/**
- *
- * @author hungnguyen
- */
+import org.apache.thrift.transport.TTransport;
+
 public class Test {
 
-    private static TFramedTransport connection;
+    private static TTransport connection;
 
     public static int Test() {
         try {
@@ -31,13 +25,6 @@ public class Test {
             connection = null;
             Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
             return -1;
-//        } finally {
-//            if (connection != null) {
-//                genericConnectionProvider.returnCon(connection);
-//            }
-        }
-
-    }
 
     public static void main(String[] args) {
         try {
@@ -48,5 +35,4 @@ public class Test {
             Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
 }

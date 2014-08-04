@@ -4,6 +4,7 @@ import org.apache.commons.pool.ObjectPool;
 import org.apache.commons.pool.impl.GenericObjectPool;
 import org.apache.thrift.transport.TFramedTransport;
 import org.apache.thrift.transport.TSocket;
+import org.apache.thrift.transport.TTransport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +34,7 @@ public class GenericConnectionProvider implements ConnectionProvider {
      *
      * @param host
      * @param port
-     * @return instance of GenericConnection Manager 
+     * @return instance of GenericConnection Manager
      */
     public static GenericConnectionProvider getInstance(String host, int port) {
         if (instance == null) {
@@ -48,7 +49,7 @@ public class GenericConnectionProvider implements ConnectionProvider {
 
     public GenericConnectionProvider(String host, int port) {
         objectPool = new GenericObjectPool();
-        System.out.println("Initialize conntion pool to server: " + host + " Port: " + port);
+        System.out.println("Initialize connection pool to server: " + host + " Port: " + port);
         ((GenericObjectPool) objectPool).setMaxActive(maxActive);
         ((GenericObjectPool) objectPool).setMaxIdle(maxIdle);
         ((GenericObjectPool) objectPool).setMinIdle(minIdle);
@@ -70,44 +71,44 @@ public class GenericConnectionProvider implements ConnectionProvider {
         }
     }
 
+//    @Override
+//    public TSocket getConnection() {
+//
+//        try {
+//            return (TSocket) objectPool.borrowObject();
+//        } catch (Exception e) {
+//            throw new RuntimeException("error getConnection()", e);
+//        }
+//    }
     @Override
-    public TSocket getConnection() {
-
+    public TTransport getConnection(boolean useFrame) {
         try {
-            return (TSocket) objectPool.borrowObject();
+            if (useFrame == true) {
+                return (TFramedTransport) objectPool.borrowObject();
+            } else {
+                return (TSocket) objectPool.borrowObject();
+            }
         } catch (Exception e) {
             throw new RuntimeException("error getConnection()", e);
         }
     }
 
+//    @Override
+//    public void returnCon(TSocket socket) {
+//        try {
+//            objectPool.returnObject(socket);
+//        } catch (Exception e) {
+//            throw new RuntimeException("error returnCon()", e);
+//        }
+//    }
     @Override
-    public TFramedTransport getConnection(boolean useFrame) {
-        try {
-            return (TFramedTransport) objectPool.borrowObject();
-        } catch (Exception e) {
-            throw new RuntimeException("error getConnection()", e);
-        }
-    }
-
-    @Override
-    public void returnCon(TSocket socket) {
+    public void returnCon(TTransport socket) {
         try {
             objectPool.returnObject(socket);
         } catch (Exception e) {
             throw new RuntimeException("error returnCon()", e);
         }
     }
-
-    @Override
-    public void returnCon(TFramedTransport socket) {
-        try {
-            objectPool.returnObject(socket);
-        } catch (Exception e) {
-            throw new RuntimeException("error returnCon()", e);
-        }
-    }
-
-    
 
     public int getConTimeOut() {
         return conTimeOut;
