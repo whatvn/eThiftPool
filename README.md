@@ -12,8 +12,8 @@ eThriftPool can be used with any thrift client in your application, it use plain
 * Apache Common pool 
 * Thrift library
 
-# Usage
-For example, you define your thrift application like this:
+# Usage: For example, you define your thrift application like this:
+    
     service PlusMe {
         i32 plusMe(1:i32 a1, 2: i32 a2),
     }
